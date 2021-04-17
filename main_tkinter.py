@@ -4,27 +4,32 @@ from random import choice, randrange
 from copy import deepcopy
 import time
 
-W, H = 10, 20
-TILE = 45
-GAME_RES = W * TILE, H * TILE
-RES = 800, 600
+tk = Tk()
+screen_width = tk.winfo_screenwidth()
+screen_height = tk.winfo_screenheight()
+
+W, H = 10, 10
+TILE = 30
+#GAME_RES = W * TILE, H * TILE
+RES = screen_width, screen_height-100
 FPS = 60
 
 
 def on_closing():
     global app_running
-    if messagebox.askokcancel("Выход из приложения", "Хотите выйти из приложения?"):
-        app_running = False
+    #if messagebox.askokcancel("Выход из приложения", "Хотите выйти из приложения?"):
+    app_running = False
         #tk.destroy()
 
 
-tk = Tk()
 app_running = True
 tk.protocol("WM_DELETE_WINDOW", on_closing)
 tk.title("Tetris")
 tk.resizable(0, 0)
 tk.wm_attributes("-topmost", 1)
 #tk.iconbitmap("bomb-3175208_640.ico")
+#
+#
 
 sc = Canvas(tk, width=RES[0], height=RES[1], bg="red", highlightthickness=0)
 sc.pack()
@@ -47,7 +52,7 @@ def set_record(record, score):
 
 
 game_sc = Canvas(tk, width=W*TILE+1, height=H*TILE+1, bg="yellow", highlightthickness=0)
-game_sc.place(x=20, y=20, anchor=NW)
+game_sc.place(x=0, y=0, anchor=NW)
 
 img_obj1 = PhotoImage(file="img/bg.png")
 sc.create_image(0, 0, anchor=NW, image=img_obj1)
@@ -55,7 +60,10 @@ sc.create_image(0, 0, anchor=NW, image=img_obj1)
 img_obj2 = PhotoImage(file="img/bg2.png")
 game_sc.create_image(0, 0, anchor=NW, image=img_obj2)
 
-grid = [game_sc.create_rectangle(x * TILE, y * TILE, x * TILE+TILE, y * TILE+TILE) for x in range(W) for y in range(H)]
+grid = [game_sc.create_rectangle(x * TILE,
+    y * TILE,
+    x * TILE+TILE,
+    y * TILE+TILE) for x in range(W) for y in range(H)]
 
 figures_pos = [[(-1, 0), (-2, 0), (0, 0), (1, 0)],
                [(0, -1), (-1, -1), (-1, 0), (0, 0)],
@@ -75,11 +83,22 @@ score, lines = 0, 0
 scores = {0: 0, 1: 100, 2: 300, 3: 700, 4: 1500}
 record = "0"
 
-sc.create_text(505, 30,text="TETRIS", font=("WiGuru 2", 50),fill="red", anchor=NW)
-sc.create_text(535, 780,text="score:", font=("WiGuru 2", 35),fill="white", anchor=NW)
-_score = sc.create_text(550, 840,text=str(score), font=("WiGuru 2", 35),fill="white", anchor=NW)
-sc.create_text(525, 650,text="record:", font=("WiGuru 2", 35),fill="white", anchor=NW)
-_record = sc.create_text(550, 710,text=record, font=("WiGuru 2", 35),fill="gold", anchor=NW)
+sc.create_text(screen_width/2,
+    screen_height/2,
+    text="TETRIS",
+    font=("WiGuru 2",50),
+    fill="green",
+    anchor=CENTER)
+sc.create_text(535, 100,text="score:", font=("WiGuru 2", 35),fill="white", anchor=NW)
+#
+#
+_height = sc.create_text(350, 240,text=screen_height, font=("WiGuru 2", 35),fill="white", anchor=NW)
+_width = sc.create_text(350, 340,text=screen_width, font=("WiGuru 2", 35),fill="white", anchor=NW)
+#
+#
+_score = sc.create_text(550, 240,text=str(score), font=("WiGuru 2", 35),fill="white", anchor=NW)
+sc.create_text(525, 350,text="record:", font=("WiGuru 2", 35),fill="white", anchor=NW)
+_record = sc.create_text(550, 410,text=record, font=("WiGuru 2", 35),fill="gold", anchor=NW)
 
 get_color = lambda : (randrange(30, 256), randrange(30, 256), randrange(30, 256))
 
