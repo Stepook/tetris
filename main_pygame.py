@@ -1,6 +1,26 @@
 import pygame
 from copy import deepcopy
 from random import choice, randrange
+import glob
+import os
+from itertools import *
+
+def scan_th():
+  os.chdir("bg")
+  a=list(glob.glob("a*.jpg"))
+  b=list(glob.glob("b*.jpg"))
+  c=[]
+  i=0
+  while(i<len(a)):
+    d=[]
+    d.append(a[i])
+    d.append(b[i])
+    c.append(d)
+    i+=1
+  return(c)
+
+print(scan_th())
+exit()
 
 W, H = 10, 20
 TILE = 18
@@ -29,8 +49,8 @@ field = [[0 for i in range(W)] for j in range(H)]
 
 anim_count, anim_speed, anim_limit = 0, 60, 2000
 
-bg = pygame.image.load('fon1.jpg').convert()
-game_bg = pygame.image.load('fon2.jpg').convert()
+bg = pygame.image.load('f5.jpg').convert()
+game_bg = pygame.image.load('f55.jpg').convert()
 
 main_font = pygame.font.Font('font/font.ttf', 65)
 font = pygame.font.Font('font/font.ttf', 45)
