@@ -4,8 +4,11 @@ from random import choice, randrange
 import glob
 import os
 from itertools import *
-
-def scan_th():
+#
+bg = None
+game_bg = None
+#
+def get_theme_list():
   os.chdir("bg")
   a=list(glob.glob("a*.jpg"))
   b=list(glob.glob("b*.jpg"))
@@ -17,11 +20,19 @@ def scan_th():
     d.append(b[i])
     c.append(d)
     i+=1
+  os.chdir("..")
   return(c)
-
-print(scan_th())
-exit()
-
+#
+def change_theme(afile,bfile):
+  global bg
+  global game_bg
+  os.chdir("bg")
+  bg = pygame.image.load(afile).convert()
+  game_bg = pygame.image.load(bfile).convert()
+  os.chdir("..")
+#
+thlist = get_theme_list()
+#
 W, H = 10, 20
 TILE = 18
 GAME_RES = W * TILE, H * TILE
@@ -49,8 +60,9 @@ field = [[0 for i in range(W)] for j in range(H)]
 
 anim_count, anim_speed, anim_limit = 0, 60, 2000
 
-bg = pygame.image.load('f5.jpg').convert()
-game_bg = pygame.image.load('f55.jpg').convert()
+change_theme(thlist[1][0],
+             thlist[1][1])
+
 
 main_font = pygame.font.Font('font/font.ttf', 65)
 font = pygame.font.Font('font/font.ttf', 45)
@@ -113,6 +125,9 @@ while True:
                 anim_limit = 100
             elif event.key == pygame.K_UP:
                 rotate = True
+            elif event.key == pygame.K_SPACE:
+                change_theme(thlist[0][0],
+                             thlist[0][1])
     # move x
     figure_old = deepcopy(figure)
     for i in range(4):
