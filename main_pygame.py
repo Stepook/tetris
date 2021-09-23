@@ -21,6 +21,7 @@ def get_theme_list():
     c.append(d)
     i+=1
   os.chdir("..")
+  print(c)
   return(c)
 #
 def change_theme(afile,bfile):
@@ -60,8 +61,9 @@ field = [[0 for i in range(W)] for j in range(H)]
 
 anim_count, anim_speed, anim_limit = 0, 60, 2000
 
-change_theme(thlist[1][0],
-             thlist[1][1])
+change_theme(thlist[0][0],
+             thlist[0][1])
+nex = 1
 
 
 main_font = pygame.font.Font('font/font.ttf', 65)
@@ -126,8 +128,12 @@ while True:
             elif event.key == pygame.K_UP:
                 rotate = True
             elif event.key == pygame.K_SPACE:
-                change_theme(thlist[0][0],
-                             thlist[0][1])
+                change_theme(thlist[nex][0],
+                             thlist[nex][1])
+                if(nex<len(thlist)-1):
+                    nex += 1
+                else:
+                    nex = 0
     # move x
     figure_old = deepcopy(figure)
     for i in range(4):
