@@ -34,18 +34,28 @@ def change_theme(afile,bfile):
 #
 thlist = get_theme_list()
 #
-W, H = 10, 20
-TILE = 18
-GAME_RES = W * TILE, H * TILE
-RES = 750, 940
-FPS = 60
-
 pygame.init()
+#
+W, H = 10, 20
+FPS = 60
+#
+RES = pygame.display.get_desktop_sizes()[0]
+RES = tuple([i//2 for i in RES])
+SW = RES[0]
+SH = RES[1]
+#
+TILE = RES[1]//(H+2)
+#
+GAME_RES = W * TILE, H * TILE
+#
 sc = pygame.display.set_mode(RES)
 game_sc = pygame.Surface(GAME_RES)
 clock = pygame.time.Clock()
 
-grid = [pygame.Rect(x * TILE, y * TILE, TILE, TILE) for x in range(W) for y in range(H)]
+grid = [
+    pygame.Rect(x * TILE, y * TILE, TILE, TILE)
+    for x in range(W) for y in range(H)
+]
 
 figures_pos = [[(-1, 0), (-2, 0), (0, 0), (1, 0)],
                [(0, -1), (-1, -1), (-1, 0), (0, 0)],
@@ -55,8 +65,17 @@ figures_pos = [[(-1, 0), (-2, 0), (0, 0), (1, 0)],
                [(0, 0), (0, -1), (0, 1), (1, -1)],
                [(0, 0), (0, -1), (0, 1), (-1, 0)]]
 
-figures = [[pygame.Rect(x + W // 2, y + 1, 1, 1) for x, y in fig_pos] for fig_pos in figures_pos]
-figure_rect = pygame.Rect(0, 0, TILE - 2, TILE - 2)
+figures = [
+    [pygame.Rect(x + W // 2, y + 1, 1, 1)
+    for x, y in fig_pos]
+    for fig_pos in figures_pos
+]
+figure_rect = pygame.Rect(
+    0,
+    0,
+    TILE-2,
+    TILE-2,
+)
 field = [[0 for i in range(W)] for j in range(H)]
 
 anim_count, anim_speed, anim_limit = 0, 60, 2000
@@ -73,7 +92,13 @@ title_tetris = main_font.render('TETRIS', True, pygame.Color('red'))
 title_score = font.render('score:', True, pygame.Color('white'))
 title_record = font.render('record:', True, pygame.Color('white'))
 
-get_color = lambda : (randrange(30, 256), randrange(30, 256), randrange(30, 256))
+get_color = lambda: (
+    randrange(30, 256),
+    randrange(30, 256),
+    randrange(30, 256)
+)
+
+get_color = lambda: (14,44,112)
 
 figure, next_figure = deepcopy(choice(figures)), deepcopy(choice(figures))
 color, next_color = get_color(), get_color()
@@ -108,9 +133,18 @@ def set_record(record, score):
 while True:
     record = get_record()
     dx, rotate = 0, False
-    sc.blit(bg, (0, 0))
-    sc.blit(game_sc, (20, 20))
-    game_sc.blit(game_bg, (0, 0))
+    sc.blit(
+        bg,
+        (SW//2-(W*TILE)//2, SH//2-(H*TILE)//2),
+    )
+    sc.blit(
+        game_sc,
+        (SW//2-(W*TILE)//2, SH//2-(H*TILE)//2),
+    )
+    game_sc.blit(
+        game_bg,
+        (0, 0)
+    )
     # delay for full lines
     for i in range(lines):
         pygame.time.wait(200)
